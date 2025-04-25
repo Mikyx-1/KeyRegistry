@@ -1,0 +1,2 @@
+# Regy
+Python registry package
