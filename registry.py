@@ -2,6 +2,7 @@ import os
 import ast
 import importlib
 from pathlib import Path
+from functools import lru_cache
 
 class ModelBuilder:
     def __init__(self, category, registry_map):
@@ -28,6 +29,7 @@ class ModelBuilder:
 
 class Registry:
     _registry = {}
+    _registry_map_cache = {}  # Cache for registry_map per category and project_root
 
     @classmethod
     def register(cls, category, name):
@@ -39,18 +41,11 @@ class Registry:
         return decorator
 
     @classmethod
-    def access(cls, category, project_root=None):
-        if project_root is None:
-            project_root = os.path.dirname(__file__)
-        project_root = Path(project_root).resolve()
-
-        # Scan project for files with @Registry.register for this category
-        registry_map = cls._scan_project(project_root, category)
-        return ModelBuilder(category, registry_map)
-
-    @classmethod
+    @lru_cache(maxsize=128)
     def _scan_project(cls, project_root, category):
-        registry_map = {}  # Maps name to module path
+        """Scan the project and return a registry_map. Cached for performance."""
+        registry_map = {}
+        project_root = Path(project_root).resolve()
         for py_file in project_root.rglob("*.py"):
             if py_file.name.startswith("__"):  # Skip __init__.py
                 continue
@@ -85,3 +80,13 @@ class Registry:
                 print(f"Warning: Could not parse {py_file}: {e}")
         
         return registry_map
+
+    @classmethod
+    def access(cls, category, project_root=None):
+        if project_root is None:
+            project_root = os.path.dirname(__file__)
+        project_root = str(Path(project_root).resolve())  # Ensure string for cache key
+        
+        # Get or compute the registry_map (cached)
+        registry_map = cls._scan_project(project_root, category)
+        return ModelBuilder(category, registry_map)
