@@ -84,8 +84,9 @@ class Registry:
     @classmethod
     def access(cls, category, project_root=None):
         if project_root is None:
-            project_root = os.path.dirname(__file__)
+            project_root = os.getcwd()
         project_root = str(Path(project_root).resolve())  # Ensure string for cache key
+        print(f"project_root: {project_root}")
         
         # Get or compute the registry_map (cached)
         registry_map = cls._scan_project(project_root, category)

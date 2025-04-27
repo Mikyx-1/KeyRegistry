@@ -1,5 +1,4 @@
-from registry import Registry
-
+from regy.registry import Registry
 @Registry.register(category="models", name="LinearModel")
 class LinearModel:
     def __init__(self, input_dim, output_dim):

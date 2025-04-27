@@ -1,4 +1,4 @@
-from registry import Registry
+from regy.registry import Registry
 
 def main():
     # Access the model builder for the 'models' category

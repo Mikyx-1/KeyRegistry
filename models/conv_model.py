@@ -1,4 +1,4 @@
-from registry import Registry
+from regy.registry import Registry
 
 @Registry.register(category="models", name="ConvolutionalModel")
 class ConvolutionalModel:
