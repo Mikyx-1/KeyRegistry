@@ -27,10 +27,7 @@ Regy enables the following:
 To install Regy, clone the repository or install it as a Python package:
 
 ```bash
-# Clone the repository
-git clone https://github.com/yourusername/regy.git
-cd regy
-pip install .
+pip install regy
 ```
 
 Alternatively, copy the `regy/` directory to your project and ensure it’s in your Python path.
@@ -168,10 +165,10 @@ plugin.run()
 
 ## Author
 - **Name**: Le Hoang Viet
-- **Contact**: [Insert your email or GitHub profile, e.g., github.com/yourusername]
+- **Contact**: lehoangviet2k@gmail.com
 
 ## Contributing
-Contributions are welcome! Please submit issues or pull requests to the [GitHub repository](https://github.com/yourusername/regy). To contribute:
+Contributions are welcome! Please submit issues or pull requests to the [GitHub repository](https://github.com/Mikyx-1/Regy). To contribute:
 1. Fork the repository.
 2. Create a feature branch (`git checkout -b feature/new-feature`).
 3. Commit your changes (`git commit -m "Add new feature"`).
