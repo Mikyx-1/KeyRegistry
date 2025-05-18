@@ -44,11 +44,13 @@ class Registry:
     _registry = {}
 
     @classmethod
-    def register(cls, category, name):
+    def register(cls, category, name=None):
         def decorator(class_):
             if category not in cls._registry:
                 cls._registry[category] = {}
-            cls._registry[category][name] = class_
+            # Use class name if name is not provided
+            registry_name = name if name is not None else class_.__name__
+            cls._registry[category][registry_name] = class_
             return class_
 
         return decorator
@@ -77,6 +79,7 @@ class Registry:
                                 and isinstance(decorator.func.value, ast.Name)
                                 and decorator.func.value.id == "Registry"
                             ):
+                                # Extract category and name from decorator arguments
                                 kw_args = {
                                     kw.arg: kw.value for kw in decorator.keywords
                                 }
@@ -84,10 +87,14 @@ class Registry:
                                     kw_args.get("category")
                                     and isinstance(kw_args["category"], ast.Constant)
                                     and kw_args["category"].value == category
-                                    and kw_args.get("name")
-                                    and isinstance(kw_args["name"], ast.Constant)
                                 ):
-                                    name = kw_args["name"].value
+                                    # Use class name if name is not provided
+                                    name = (
+                                        kw_args["name"].value
+                                        if kw_args.get("name")
+                                        and isinstance(kw_args["name"], ast.Constant)
+                                        else node.name
+                                    )
                                     parent_dir = str(py_file.parent.resolve())
                                     module_path = (
                                         py_file.stem
