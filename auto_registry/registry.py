@@ -77,7 +77,7 @@ class AutoReg:
                                 and isinstance(decorator.func, ast.Attribute)
                                 and decorator.func.attr == "register"
                                 and isinstance(decorator.func.value, ast.Name)
-                                and decorator.func.value.id == "Registry"
+                                and decorator.func.value.id == "AutoReg"
                             ):
                                 # Extract category and name from decorator arguments
                                 kw_args = {
