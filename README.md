@@ -43,7 +43,7 @@ Decorate your classes with `@Registry.register`, specifying a `category` and an 
 
 Example (`models/my_model.py`):
 ```python
-from regy.registry import Registry
+from regy import Registry
 
 @Registry.register(category="models")  # Name defaults to "MyModel"
 class MyModel:
@@ -66,7 +66,7 @@ Use the `Registry.access` and `ModelBuilder.build` methods to create instances.
 
 Example:
 ```python
-from regy.registry import Registry
+from regy import Registry
 
 # Access the registry for a category
 model_builder = Registry.access(category="models", project_root="/path/to/your/project")
@@ -133,7 +133,7 @@ Computer-Vision-Models/
 ```python
 import torch
 from torch import nn
-from regy.registry import Registry
+from regy import Registry
 
 @Registry.register(category="models")
 class AlexNet(nn.Module):
@@ -146,7 +146,7 @@ class AlexNet(nn.Module):
 
 `main.py`:
 ```python
-from regy.registry import Registry
+from regy import Registry
 
 model_builder = Registry.access(category="models")
 alex_net = model_builder.build("AlexNet", in_channels=3, num_classes=1000)
@@ -156,7 +156,7 @@ print(alex_net)  # Output: AlexNet(...)
 ### Example 2: Plugin System
 Register plugins in a directory and instantiate them dynamically:
 ```python
-from regy.registry import Registry
+from regy import Registry
 
 plugin_builder = Registry.access(category="plugins", project_root="./plugins")
 plugin = plugin_builder.build("MyPlugin", config="settings.yaml")
@@ -176,4 +176,4 @@ Contributions are welcome! Please submit issues or pull requests to the [GitHub 
 5. Open a pull request.
 
 ## License
-Regy is licensed under the [MIT License](LICENSE). See the LICENSE file for details.
+Regy is licensed under the [Apache License 2.0](LICENSE). See the LICENSE file for details.
