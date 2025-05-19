@@ -9,9 +9,9 @@ AutoRegistry provides a registry system that **automatically scans a project dir
 Key features:
 - **Automatic Discovery**: Scans project directories for registered classes using AST parsing.
 - **Flexible Imports**: Supports dynamic imports without requiring package structures (e.g., `__init__.py` files).
-- **Category-Based Organization**: Groups classes by user-defined categories (e.g., "models", "plugins").
+- **Category-Based Organisation**: Groups classes by user-defined categories (e.g., "models", "plugins").
 - **Convenient Registration**: Optionally uses class names as default registration names, requiring only a category.
-- **Performance Optimization**: Caches scan results to minimize overhead.
+- **Performance Optimisation**: Caches scan results to minimise overhead.
 
 ## What Can It Do?
 
@@ -24,7 +24,7 @@ AutoRegistry enables the following:
 
 ## Installation
 
-To install AutoRegistry, clone the repository or install it as a Python package:
+To install AutoRegistry, install it as a Python package:
 
 ```bash
 pip install auto-registry
@@ -87,7 +87,7 @@ my_project/
 │   ├── another_model.py
 ├── other_components/
 │   ├── plugin.py
-├── regy/
+├── auto_registry/
 │   ├── __init__.py
 │   ├── registry.py
 ├── main.py
@@ -109,7 +109,7 @@ AutoRegistry provides informative errors:
    - For applications with pluggable components (e.g., data processors, APIs), AutoRegistry enables developers to add new plugins by dropping Python files with decorated classes into a directory, without modifying import statements.
 
 3. **Extensible Frameworks**:
-   - In frameworks where users contribute components (e.g., custom optimizers, loss functions), AutoRegistry simplifies integration by automatically discovering and registering user-defined classes.
+   - In frameworks where users contribute components (e.g., custom optimisers, loss functions), AutoRegistry simplifies integration by automatically discovering and registering user-defined classes.
 
 4. **Testing and Prototyping**:
    - When prototyping, AutoRegistry allows quick iteration by registering new classes in separate files, enabling dynamic instantiation for testing without hardcoding imports.
