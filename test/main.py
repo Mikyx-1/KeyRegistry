@@ -1,8 +1,8 @@
-from regy.registry import Registry
+from auto_registry import AutoReg
 
 def main():
     # Access the model builder for the 'models' category
-    model_builder = Registry.access(category="models")
+    model_builder = AutoReg.access(category="models")
 
     # Build a CNN model
     cnn_model = model_builder.build(name="cnn", filters=64)

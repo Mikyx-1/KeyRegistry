@@ -1,5 +1,5 @@
-from regy.registry import Registry
-@Registry.register(category="models", name="LinearModel")
+from auto_registry import AutoReg
+@AutoReg.register(category="models", name="LinearModel")
 class LinearModel:
     def __init__(self, input_dim, output_dim):
         self.input_dim = input_dim

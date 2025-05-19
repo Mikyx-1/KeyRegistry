@@ -30,17 +30,17 @@ class ModelBuilder:
             sys.path[:] = original_sys_path  # Restore sys.path
 
         if (
-            self.category not in Registry._registry
-            or name not in Registry._registry[self.category]
+            self.category not in AutoReg._registry
+            or name not in AutoReg._registry[self.category]
         ):
             raise KeyError(
                 f"No class named '{name}' registered in category '{self.category}' after import"
             )
 
-        return Registry._registry[self.category][name](*args, **kwargs)
+        return AutoReg._registry[self.category][name](*args, **kwargs)
 
 
-class Registry:
+class AutoReg:
     _registry = {}
 
     @classmethod

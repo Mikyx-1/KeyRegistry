@@ -1,6 +1,6 @@
-from regy.registry import Registry
+from auto_registry import AutoReg
 
-@Registry.register(category="models", name="cnn")
+@AutoReg.register(category="models", name="cnn")
 class CNN:
     def __init__(self, filters=32):
         self.filters = filters

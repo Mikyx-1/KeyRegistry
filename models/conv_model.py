@@ -1,6 +1,6 @@
-from regy.registry import Registry
+from auto_registry import AutoReg
 
-@Registry.register(category="models", name="ConvolutionalModel")
+@AutoReg.register(category="models", name="ConvolutionalModel")
 class ConvolutionalModel:
     def __init__(self, layers):
         self.layers = layers
