@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "A Python package for dynamic model registration"
 readme = "README.md"
 authors = [
-    { name = "Le Hoang Viet", email = "lehoangviet2k@google.com" }
+    { name = "Le Hoang Viet", email = "lehoangviet2k@gmail.com" }
 ]
 license = { file = "LICENSE" }
 classifiers = [
