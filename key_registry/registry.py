@@ -30,17 +30,17 @@ class ModelBuilder:
             sys.path[:] = original_sys_path  # Restore sys.path
 
         if (
-            self.category not in AutoReg._registry
-            or name not in AutoReg._registry[self.category]
+            self.category not in KeyRegistry._registry
+            or name not in KeyRegistry._registry[self.category]
         ):
             raise KeyError(
                 f"No class named '{name}' registered in category '{self.category}' after import"
             )
 
-        return AutoReg._registry[self.category][name](*args, **kwargs)
+        return KeyRegistry._registry[self.category][name](*args, **kwargs)
 
 
-class AutoReg:
+class KeyRegistry:
     _registry = {}
 
     @classmethod
@@ -77,7 +77,7 @@ class AutoReg:
                                 and isinstance(decorator.func, ast.Attribute)
                                 and decorator.func.attr == "register"
                                 and isinstance(decorator.func.value, ast.Name)
-                                and decorator.func.value.id == "AutoReg"
+                                and decorator.func.value.id == "KeyRegistry"
                             ):
                                 # Extract category and name from decorator arguments
                                 kw_args = {

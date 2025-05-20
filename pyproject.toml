@@ -1,7 +1,11 @@
+[build-system]
+requires = ["hatchling>=1.18.0"]
+build-backend = "hatchling.build"
+
 [project]
-name = "auto_registry"
+name = "KeyRegistry"
 version = "0.1.0"
-description = "A Python package for dynamic model registration"
+description = "A Python package for dynamic class registration and instantiation"
 readme = "README.md"
 authors = [
     { name = "Le Hoang Viet", email = "lehoangviet2k@gmail.com" }
@@ -16,9 +20,17 @@ requires-python = ">=3.6"
 dependencies = []
 
 [project.urls]
-Homepage = "https://github.com/Mikyx-1/AutoRegistry"
-Repository = "https://github.com/Mikyx-1/AutoRegistry"
+Homepage = "https://github.com/Mikyx-1/KeyRegistry"
+Repository = "https://github.com/Mikyx-1/KeyRegistry"
+Issues = "https://github.com/Mikyx-1/KeyRegistry/issues"
 
-[build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+[tool.hatch.build.targets.wheel]
+packages = ["key_registry"]
+include = [
+    "LICENSE",
+    "README.md"
+]
+exclude = [
+    "models",
+    "test"
+]
