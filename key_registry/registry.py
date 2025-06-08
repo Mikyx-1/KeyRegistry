@@ -1,6 +1,6 @@
-import ast
 import importlib
 import os
+import re
 import sys
 from functools import lru_cache
 from pathlib import Path
@@ -42,6 +42,14 @@ class ModelBuilder:
 
 class KeyRegistry:
     _registry = {}
+    
+    # Single combined regex pattern for @KeyRegistry.register with positional or keyword args
+    _DECORATOR_PATTERN = re.compile(
+        r'@KeyRegistry\.register\s*\(\s*(?:category\s*=\s*)?["\']([^"\']+)["\']'
+        r'(?:\s*,\s*(?:name\s*=\s*)?["\']([^"\']+)["\'])?\s*\)'  
+        r'\s*(?:\n\s*)*class\s+(\w+)',
+        re.MULTILINE | re.DOTALL
+    )
 
     @classmethod
     def register(cls, category, name=None):
@@ -56,52 +64,41 @@ class KeyRegistry:
         return decorator
 
     @classmethod
+    def _process_file_regex(cls, py_file, category):
+        """Process a single file using regex patterns."""
+        registry_map = {}
+        
+        if py_file.name.startswith("__"):  # Skip __init__.py
+            return registry_map
+            
+        try:
+            with open(py_file, "r", encoding="utf-8") as f:
+                source = f.read()
+            
+            # Apply the combined regex pattern
+            matches = cls._DECORATOR_PATTERN.findall(source)
+            for found_category, custom_name, class_name in matches:
+                if found_category == category:
+                    name = custom_name if custom_name else class_name
+                    parent_dir = str(py_file.parent.resolve())
+                    module_path = py_file.stem
+                    registry_map[name] = (module_path, parent_dir)
+                        
+        except (OSError, UnicodeDecodeError) as e:
+            print(f"Warning: Could not process {py_file}: {e}")
+        
+        return registry_map
+
+    @classmethod
     @lru_cache(maxsize=128)
     def _scan_project(cls, project_root, category):
-        """Scan the project and return a registry_map."""
+        """Scan the project using regex for speed."""
         registry_map = {}
         project_root = Path(project_root).resolve()
+        
         for py_file in project_root.rglob("*.py"):
-            if py_file.name.startswith("__"):  # Skip __init__.py
-                continue
-            try:
-                with open(py_file, "r", encoding="utf-8") as f:
-                    source = f.read()
-                tree = ast.parse(source, filename=str(py_file))
-
-                for node in ast.walk(tree):
-                    if isinstance(node, ast.ClassDef):
-                        for decorator in node.decorator_list:
-                            if (
-                                isinstance(decorator, ast.Call)
-                                and isinstance(decorator.func, ast.Attribute)
-                                and decorator.func.attr == "register"
-                                and isinstance(decorator.func.value, ast.Name)
-                                and decorator.func.value.id == "KeyRegistry"
-                            ):
-                                # Extract category and name from decorator arguments
-                                kw_args = {
-                                    kw.arg: kw.value for kw in decorator.keywords
-                                }
-                                if (
-                                    kw_args.get("category")
-                                    and isinstance(kw_args["category"], ast.Constant)
-                                    and kw_args["category"].value == category
-                                ):
-                                    # Use class name if name is not provided
-                                    name = (
-                                        kw_args["name"].value
-                                        if kw_args.get("name")
-                                        and isinstance(kw_args["name"], ast.Constant)
-                                        else node.name
-                                    )
-                                    parent_dir = str(py_file.parent.resolve())
-                                    module_path = (
-                                        py_file.stem
-                                    )  # Use file name (e.g., "alexnet")
-                                    registry_map[name] = (module_path, parent_dir)
-            except (SyntaxError, UnicodeDecodeError) as e:
-                print(f"Warning: Could not parse {py_file}: {e}")
+            file_registry = cls._process_file_regex(py_file, category)
+            registry_map.update(file_registry)
 
         return registry_map
 
